@@ -1,0 +1,133 @@
+﻿<Page x:Class="UWPApp1.Views.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+      xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
+      xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+      xmlns:ct="using:UWPApp1.Controls"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:muxc="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      Style="{StaticResource PageStyle}"
+      mc:Ignorable="d">
+    <Page.Resources>
+        <converters:TaskResultConverter x:Key="TaskResultConverter" />
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </Page.Resources>
+
+    <interactivity:Interaction.Behaviors>
+        <core:EventTriggerBehavior EventName="Loaded">
+            <core:InvokeCommandAction Command="{x:Bind ViewModel.LoadPageCommand}" CommandParameter="AsyncRelayCommand" />
+        </core:EventTriggerBehavior>
+    </interactivity:Interaction.Behaviors>
+
+    <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Uid="Main_Title"
+                   Grid.Row="0"
+                   Style="{StaticResource PageTitleStyle}" />
+        <Grid Grid.Row="1" Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
+            <!--
+                The SystemControlPageBackgroundChromeLowBrush background represents where you should place your content.
+                Place your content here.
+            -->
+
+            <controls:DockPanel LastChildFill="True">
+                <Grid controls:DockPanel.Dock="Top">
+                    <StackPanel HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Orientation="Horizontal">
+                        <ComboBox VerticalContentAlignment="Center"
+                                  BorderThickness="0"
+                                  FontSize="30"
+                                  ItemsSource="{x:Bind ViewModel.OptionBases}"
+                                  SelectedItem="{x:Bind ViewModel.CurBase, Mode=TwoWay}" />
+                        <TextBlock VerticalAlignment="Center"
+                                   FontSize="30"
+                                   Text=" 进制" />
+
+
+                        <CheckBox x:Name="isShowUpper0"
+                                  Margin="100,0,-90,0"
+                                  IsChecked="{x:Bind ViewModel.IsShowUpper0, Mode=TwoWay}" />
+                        <TextBlock VerticalAlignment="Center"
+                                   FontSize="30"
+                                   Text="高位补 0" />
+
+                        <CheckBox x:Name="isShow10Count" Margin="100,0,-90,0" />
+                        <TextBlock VerticalAlignment="Center"
+                                   FontSize="30"
+                                   Text="显示对应的十进制数" />
+                    </StackPanel>
+
+                    <StackPanel HorizontalAlignment="Right"
+                                Orientation="Horizontal"
+                                Spacing="10">
+                        <Button VerticalContentAlignment="Center"
+                                Command="{x:Bind ViewModel.AsyncStartCmd}"
+                                Content="{x:Bind ViewModel.BtnText, Mode=TwoWay}" />
+
+                        <Button Width="70"
+                                VerticalContentAlignment="Center"
+                                Command="{x:Bind ViewModel.AsyncNewStartCmd}"
+                                Content="重新开始" />
+
+                        <DropDownButton Content="操作" Visibility="Collapsed">
+                            <DropDownButton.Flyout>
+                                <MenuFlyout Placement="Bottom">
+                                    <MenuFlyoutItem Command="{x:Bind ViewModel.AsyncStartCmd}" Text="开始" />
+                                    <MenuFlyoutItem Command="{x:Bind ViewModel.PauseCmd}" Text="暂停" />
+                                    <MenuFlyoutItem Command="{x:Bind ViewModel.AsyncNewStartCmd}" Text="重新开始" />
+                                </MenuFlyout>
+                            </DropDownButton.Flyout>
+                        </DropDownButton>
+                    </StackPanel>
+
+                </Grid>
+
+                <StackPanel controls:DockPanel.Dock="Bottom"
+                            Spacing="8"
+                            Visibility="Collapsed">
+                    <TextBlock>
+                        <Run Text="Task status:" />
+                        <Run Text="{x:Bind ViewModel.DownloadTextCommand.ExecutionTask.Status, Mode=OneWay}" />
+                        <LineBreak />
+                        <Run Text="Result:" />
+                        <!--<Run Text="{x:Bind ViewModel.DownloadTextCommand.ExecutionTask, Converter={StaticResource TaskResultConverter}, Mode=OneWay}" />-->
+                    </TextBlock>
+                    <Button Command="{x:Bind ViewModel.DownloadTextCommand}" Content="Click me!" />
+                    <muxc:ProgressRing HorizontalAlignment="Left" IsActive="{x:Bind ViewModel.DownloadTextCommand.IsRunning, Mode=OneWay}" />
+
+
+                </StackPanel>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="10" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Bottom"
+                               FontSize="100"
+                               Text="{x:Bind ViewModel.CurDisplayNumber, Mode=TwoWay}" />
+                    <TextBlock Grid.Row="2"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Top"
+                               FontSize="70"
+                               Foreground="LightGray"
+                               Text="{x:Bind ViewModel.CurCount, Mode=TwoWay}"
+                               Visibility="{Binding ElementName=isShow10Count, Path=IsChecked, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    <!--  Visibility="{Binding ElementName=isShowUpper0, Path=IsChecked, Converter={StaticResource BoolToVisibilityConverter}}"  -->
+                </Grid>
+            </controls:DockPanel>
+        </Grid>
+    </Grid>
+</Page>
