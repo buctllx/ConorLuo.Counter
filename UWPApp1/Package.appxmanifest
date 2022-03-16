@@ -9,7 +9,7 @@
 
   <Identity
     Name="6EF69A3A-4523-4533-84DA-0F565EB6B5C2"
-    Publisher="CN=ConorLuo"
+    Publisher="CN=luolx"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="6EF69A3A-4523-4533-84DA-0F565EB6B5C2" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
@@ -33,10 +33,10 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="UWPApp1.App">
       <uap:VisualElements
-        DisplayName="计数器"
+        DisplayName="Counter"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
-        Description="同步进制的计数器"
+        Description="可以切换不同进制的计数器"
         BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" Square71x71Logo="Assets\SmallTile.png" Square310x310Logo="Assets\LargeTile.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
